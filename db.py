@@ -3,12 +3,12 @@ from random import shuffle
 players_id = []
 players_num = 0
 
-db_path = r"C:\Users\lizko\рабочая папка\Telebot\mafia\db.db"
+
 
 
 def role_player(player_id):
     global db_path
-    con = sqlite3.connect(db_path)
+    con = sqlite3.connect('db.db')
     cur = con.cursor()
     sql = f"SELECT role FROM players WHERE player_id = '{player_id}'"
     cur.execute(sql)
@@ -20,7 +20,7 @@ def role_player(player_id):
 
 def mafia_player():
     global db_path
-    con = sqlite3.connect(db_path)
+    con = sqlite3.connect('db.db')
     cur = con.cursor()
     sql = f"SELECT username FROM players WHERE role = 'mafia' AND dead = 0"
     cur.execute(sql)
@@ -30,7 +30,7 @@ def mafia_player():
 
 def citizen_player():
     global db_path
-    con = sqlite3.connect(db_path)
+    con = sqlite3.connect('db.db')
     cur = con.cursor()
     sql = f"SELECT username FROM players WHERE NOT role = 'mafia' AND dead = 0"
     cur.execute(sql)
@@ -41,7 +41,7 @@ def citizen_player():
 
 def insert_player(player_id, username):
     global db_path
-    con = sqlite3.connect(db_path)
+    con = sqlite3.connect('db.db')
     cur = con.cursor()
     sql = f"INSERT INTO players (player_id, username) VALUES ('{player_id}', '{username}')"
     cur.execute(sql)
@@ -53,7 +53,7 @@ def insert_player(player_id, username):
 
 def players_numm():
     global db_path, players_id, players_num
-    con = sqlite3.connect(db_path)
+    con = sqlite3.connect('db.db')
     cur = con.cursor()
     sql = f"SELECT player_id FROM players"
     cur.execute(sql)
@@ -64,7 +64,7 @@ def players_numm():
 
 def players_idd():
     global db_path, players_id, players_num
-    con = sqlite3.connect(db_path)
+    con = sqlite3.connect('db.db')
     cur = con.cursor()
     sql = f"SELECT player_id FROM players"
     cur.execute(sql)
@@ -100,7 +100,7 @@ roles = roles_list(players_num)
 
 def player_role():
     global roles, players_id, db_path
-    con = sqlite3.connect(db_path)
+    con = sqlite3.connect('db.db')
     cur = con.cursor()
     for role, player_id in zip(roles, players_id):
         sql = f"UPDATE players SET role = '{role}' WHERE player_id = '{player_id}'"
@@ -109,7 +109,7 @@ def player_role():
     con.close()
 
 def vote(type, username, player_id):
-    con = sqlite3.connect(db_path)
+    con = sqlite3.connect('db.db')
     cur = con.cursor() 
     sql = f"SELECT username FROM players WHERE player_id = '{player_id}' and dead = '0' and voted = '0'"
     cur.execute(sql)
@@ -129,7 +129,7 @@ def vote(type, username, player_id):
     
 
 def mafia_kill():
-    con = sqlite3.connect(db_path)
+    con = sqlite3.connect('db.db')
     cur = con.cursor()
     sql = f'SELECT MAX(mafia_vote) FROM players'
     cur.execute(sql)
@@ -147,7 +147,7 @@ def mafia_kill():
     return username_killed
 
 def citizen_kill():
-    con = sqlite3.connect(db_path)
+    con = sqlite3.connect('db.db')
     cur = con.cursor()
     sql = f"SELECT MAX(citizen_vote) FROM players"
     cur.execute(sql)
@@ -168,7 +168,7 @@ def citizen_kill():
 
 
 def all_alive():
-    con = sqlite3.connect(db_path)
+    con = sqlite3.connect('db.db')
     cur = con.cursor()
     sql = f"SELECT username FROM players WHERE dead = 0"
     cur.execute(sql)
@@ -188,7 +188,7 @@ def check_winner():
     return
 
 def clear(dead = False):
-    con = sqlite3.connect(db_path)
+    con = sqlite3.connect('db.db')
     cur = con.cursor()
     sql = f"UPDATE players SET citizen_vote = 0, mafia_vote = 0, voted = 0, role = '' "
     if dead:
@@ -198,7 +198,7 @@ def clear(dead = False):
     con.close
 
 def all_dead():
-    con = sqlite3.connect(db_path)
+    con = sqlite3.connect('db.db')
     cur = con.cursor()
     sql = f"SELECT username FROM players WHERE dead = 1"
     cur.execute(sql)
